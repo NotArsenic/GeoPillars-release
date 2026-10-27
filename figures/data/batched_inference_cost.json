@@ -1,0 +1,182 @@
+{
+ "description": "Inference cost of the released epoch_8 checkpoints at a FIXED batch size (24), fp32, on CARLA test scans. Companion to inference_cost.json (batch 1). VRAM = peak torch allocation over the timed batches, counter reset after warm-up.",
+ "generated_at": "2026-09-20T21:46:59+00:00",
+ "generated_by": "scripts/figure_data/measure_batched_cost.py",
+ "environment": {
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "gpu_total_mb": 15841,
+  "torch": "2.7.1+cu128",
+  "python": "3.10.20"
+ },
+ "settings": {
+  "batch_size": 24,
+  "n_batches_timed": 12,
+  "warmup_batches": 3,
+  "precision": "fp32",
+  "data_root": "data/Processed_data/",
+  "ann_file": "nuscenes_infos_val.pkl"
+ },
+ "runs": {
+  "A": {
+   "run": "geo_pillars_h100_intensity",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 839.18,
+   "ms_per_batch_median": 839.41,
+   "ms_per_sample_mean": 34.966,
+   "peak_vram_allocated_mb": 4318.8,
+   "peak_vram_reserved_mb": 5096.0,
+   "weights_vram_mb": 27.9,
+   "params": 7276116,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "B": {
+   "run": "geo_pillars_h100_nointensity_final",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 837.6,
+   "ms_per_batch_median": 838.44,
+   "ms_per_sample_mean": 34.9,
+   "peak_vram_allocated_mb": 4311.1,
+   "peak_vram_reserved_mb": 5528.0,
+   "weights_vram_mb": 27.9,
+   "params": 7276052,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "C": {
+   "run": "centerpoint_h100_intensity_original",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 406.35,
+   "ms_per_batch_median": 406.29,
+   "ms_per_sample_mean": 16.931,
+   "peak_vram_allocated_mb": 3208.8,
+   "peak_vram_reserved_mb": 8986.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838987,
+   "voxel_size": [
+    0.2,
+    0.2,
+    8.0
+   ],
+   "max_num_points": 20,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "D": {
+   "run": "centerpoint_h100_intensity",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 207.07,
+   "ms_per_batch_median": 207.0,
+   "ms_per_sample_mean": 8.628,
+   "peak_vram_allocated_mb": 841.9,
+   "peak_vram_reserved_mb": 1560.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838987,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "E": {
+   "run": "centerpoint_h100_no_intensity",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 208.04,
+   "ms_per_batch_median": 208.13,
+   "ms_per_sample_mean": 8.669,
+   "peak_vram_allocated_mb": 835.6,
+   "peak_vram_reserved_mb": 1564.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838923,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "F": {
+   "run": "centerpoint_osf1_ablation",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 415.47,
+   "ms_per_batch_median": 415.18,
+   "ms_per_sample_mean": 17.311,
+   "peak_vram_allocated_mb": 5435.9,
+   "peak_vram_reserved_mb": 9340.0,
+   "weights_vram_mb": 27.0,
+   "params": 7050827,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  },
+  "G": {
+   "run": "centerpoint_geopillar_encoder_replk_distributed",
+   "batch_size": 24,
+   "precision": "fp32",
+   "status": "ok",
+   "n_batches_timed": 12,
+   "warmup_batches": 3,
+   "ms_per_batch_mean": 829.21,
+   "ms_per_batch_median": 829.16,
+   "ms_per_sample_mean": 34.55,
+   "peak_vram_allocated_mb": 4304.3,
+   "peak_vram_reserved_mb": 5096.0,
+   "weights_vram_mb": 26.8,
+   "params": 6979284,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true
+  }
+ }
+}

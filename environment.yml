@@ -1,0 +1,14 @@
+# Base environment: Python plus the compiler toolchain for the mmcv and mmdet3d CUDA ops.
+# PyTorch, the OpenMMLab stack and the Python requirements come from the setup script:
+#
+#   conda env create -f environment.yml
+#   conda activate geopillars
+#   bash modifiedLibs/setup_env.sh
+name: geopillars
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - gcc_linux-64=13
+  - gxx_linux-64=13

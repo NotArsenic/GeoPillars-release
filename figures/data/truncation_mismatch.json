@@ -1,0 +1,221 @@
+{
+  "description": "Train/test point-truncation mismatch. PointShuffle is the last transform of every run train pipeline and is absent from every test pipeline; hard voxelisation keeps the first max_num_points points of each pillar in arrival order, so training sees a random 8-point subset of each saturated pillar and inference sees the first 8 in raw scan order.",
+  "source": {
+    "truncation_kernel": "modifiedLibs/mmcv-2.1.0/mmcv/ops/csrc/common/cuda/voxelization_cuda_kernel.cuh:95-136 (point_to_voxelidx_kernel)",
+    "deterministic_default": "mmcv Voxelization(deterministic=True); no run config overrides it",
+    "data_root": "data/Processed_data/",
+    "ann_file": "nuscenes_infos_val.pkl"
+  },
+  "settings": {
+    "n_scans": 200,
+    "n_shuffle_draws": 5,
+    "seed": 0,
+    "max_num_points": 8,
+    "voxel_size": [
+      0.4,
+      0.4,
+      8.0
+    ],
+    "point_cloud_range": [
+      -51.2,
+      -51.2,
+      -5.0,
+      51.2,
+      51.2,
+      3.0
+    ]
+  },
+  "kernel_check": {
+    "scan": "024773.npy",
+    "pillars_checked": 3494,
+    "pillars_matching_first_n_in_arrival_order": 3494,
+    "pillars_mismatching": 0,
+    "conclusion": "hard voxelisation keeps the first max_num_points points of each pillar in input order, slot by slot"
+  },
+  "pillar_counts": {
+    "points_total": 5840127,
+    "points_in_range": 5213117,
+    "pillars_total": 672198,
+    "pillars_saturated": 144912,
+    "fraction_pillars_saturated": 0.215579,
+    "points_in_saturated_pillars": 3558180,
+    "fraction_in_range_points_discarded": 0.460163,
+    "saturated_pillar_point_count": {
+      "mean": 24.554,
+      "median": 14.0,
+      "p90": 40.0,
+      "max": 1004
+    }
+  },
+  "retained_set_difference": {
+    "n_comparisons": 724560,
+    "fraction_differing": 0.982258,
+    "overlap_out_of_8_mean": 4.3653,
+    "overlap_out_of_8_median": 5.0,
+    "overlap_expected_if_uniform_subset": 4.3633,
+    "fraction_identical": 0.017742
+  },
+  "retained_set_geometry": {
+    "note": "per saturated pillar, the mean over the 8 retained points; noshuffle = first 8 in file order, shuffle = 8 after PointShuffle",
+    "abs_delta_z_m": {
+      "mean": 0.193,
+      "median": 0.0025,
+      "p90": 0.7483,
+      "max": 3.6416
+    },
+    "abs_delta_range_m": {
+      "mean": 0.0418,
+      "median": 0.0134,
+      "p90": 0.1246,
+      "max": 0.6812
+    },
+    "signed_delta_z_m_mean": 0.19134,
+    "signed_delta_range_m_mean": 0.02968,
+    "mean_z_noshuffle": -1.0573,
+    "mean_z_shuffle": -1.2487,
+    "mean_range_noshuffle": 8.0505,
+    "mean_range_shuffle": 8.0208
+  },
+  "per_scan": [
+    {
+      "sample_idx": 83,
+      "n_points": 28841,
+      "n_in_range": 24420,
+      "n_pillars": 3494,
+      "n_saturated": 708
+    },
+    {
+      "sample_idx": 164,
+      "n_points": 28258,
+      "n_in_range": 25644,
+      "n_pillars": 4101,
+      "n_saturated": 790
+    },
+    {
+      "sample_idx": 254,
+      "n_points": 28543,
+      "n_in_range": 25756,
+      "n_pillars": 3606,
+      "n_saturated": 790
+    },
+    {
+      "sample_idx": 453,
+      "n_points": 29549,
+      "n_in_range": 25365,
+      "n_pillars": 3802,
+      "n_saturated": 784
+    },
+    {
+      "sample_idx": 503,
+      "n_points": 29961,
+      "n_in_range": 28223,
+      "n_pillars": 2808,
+      "n_saturated": 889
+    },
+    {
+      "sample_idx": 506,
+      "n_points": 30119,
+      "n_in_range": 28216,
+      "n_pillars": 2745,
+      "n_saturated": 811
+    },
+    {
+      "sample_idx": 678,
+      "n_points": 30506,
+      "n_in_range": 26868,
+      "n_pillars": 3284,
+      "n_saturated": 790
+    },
+    {
+      "sample_idx": 868,
+      "n_points": 27901,
+      "n_in_range": 25038,
+      "n_pillars": 3805,
+      "n_saturated": 756
+    },
+    {
+      "sample_idx": 1030,
+      "n_points": 30419,
+      "n_in_range": 26942,
+      "n_pillars": 3624,
+      "n_saturated": 849
+    },
+    {
+      "sample_idx": 1255,
+      "n_points": 28905,
+      "n_in_range": 26270,
+      "n_pillars": 3093,
+      "n_saturated": 829
+    },
+    {
+      "sample_idx": 1492,
+      "n_points": 30849,
+      "n_in_range": 28964,
+      "n_pillars": 2840,
+      "n_saturated": 904
+    },
+    {
+      "sample_idx": 1495,
+      "n_points": 24061,
+      "n_in_range": 22568,
+      "n_pillars": 3214,
+      "n_saturated": 522
+    },
+    {
+      "sample_idx": 1534,
+      "n_points": 29157,
+      "n_in_range": 26680,
+      "n_pillars": 2982,
+      "n_saturated": 582
+    },
+    {
+      "sample_idx": 1600,
+      "n_points": 29931,
+      "n_in_range": 25639,
+      "n_pillars": 4101,
+      "n_saturated": 761
+    },
+    {
+      "sample_idx": 1800,
+      "n_points": 28561,
+      "n_in_range": 24629,
+      "n_pillars": 3080,
+      "n_saturated": 603
+    },
+    {
+      "sample_idx": 2240,
+      "n_points": 29361,
+      "n_in_range": 26461,
+      "n_pillars": 3117,
+      "n_saturated": 784
+    },
+    {
+      "sample_idx": 2306,
+      "n_points": 29151,
+      "n_in_range": 26204,
+      "n_pillars": 3957,
+      "n_saturated": 652
+    },
+    {
+      "sample_idx": 2394,
+      "n_points": 28681,
+      "n_in_range": 26018,
+      "n_pillars": 3554,
+      "n_saturated": 763
+    },
+    {
+      "sample_idx": 2438,
+      "n_points": 30744,
+      "n_in_range": 28892,
+      "n_pillars": 4102,
+      "n_saturated": 863
+    },
+    {
+      "sample_idx": 2466,
+      "n_points": 28081,
+      "n_in_range": 23770,
+      "n_pillars": 3576,
+      "n_saturated": 557
+    }
+  ]
+}

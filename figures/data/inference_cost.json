@@ -1,0 +1,229 @@
+{
+ "description": "Per-sample inference cost of the released epoch_8 checkpoints at batch size 1 on CARLA test scans. latency = model.test_step (GPU voxelisation + network + decode/NMS), data loading excluded; VRAM = peak torch allocation during the timed loop.",
+ "generated_at": "2026-09-15T01:40:21+00:00",
+ "generated_by": "scripts/figure_data/measure_inference_cost.py",
+ "environment": {
+  "gpu": "NVIDIA GeForce RTX 5060 Ti",
+  "torch": "2.7.1+cu128",
+  "python": "3.10.20"
+ },
+ "data": {
+  "data_root": "data/Processed_data/",
+  "ann_file": "nuscenes_infos_val.pkl",
+  "n_frames": 550,
+  "warmup": 50,
+  "frame_selection": "np.linspace(0, 30841, 550).round()"
+ },
+ "runs": {
+  "A": {
+   "run": "geo_pillars_h100_intensity",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 32.289,
+   "latency_ms_median": 32.307,
+   "latency_ms_p90": 32.768,
+   "latency_ms_std": 0.371,
+   "peak_vram_allocated_mb": 215.1,
+   "peak_vram_reserved_mb": 316.0,
+   "weights_vram_mb": 27.9,
+   "params": 7276116,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.8133,
+   "full_eval_batched_reference": {
+    "batch_size": 24,
+    "ms_per_batch": 842.38,
+    "peak_vram_allocated_mb": 8507,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "B": {
+   "run": "geo_pillars_h100_nointensity_final",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 32.131,
+   "latency_ms_median": 32.131,
+   "latency_ms_p90": 32.565,
+   "latency_ms_std": 0.384,
+   "peak_vram_allocated_mb": 214.7,
+   "peak_vram_reserved_mb": 316.0,
+   "weights_vram_mb": 27.9,
+   "params": 7276052,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.8121,
+   "full_eval_batched_reference": {
+    "batch_size": 24,
+    "ms_per_batch": 841.67,
+    "peak_vram_allocated_mb": 8506,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "C": {
+   "run": "centerpoint_h100_intensity_original",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 16.54,
+   "latency_ms_median": 16.577,
+   "latency_ms_p90": 16.973,
+   "latency_ms_std": 0.384,
+   "peak_vram_allocated_mb": 171.7,
+   "peak_vram_reserved_mb": 410.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838987,
+   "voxel_size": [
+    0.2,
+    0.2,
+    8.0
+   ],
+   "max_num_points": 20,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.7942,
+   "full_eval_batched_reference": {
+    "batch_size": 16,
+    "ms_per_batch": 272.08,
+    "peak_vram_allocated_mb": 9929,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "D": {
+   "run": "centerpoint_h100_intensity",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 9.761,
+   "latency_ms_median": 9.747,
+   "latency_ms_p90": 10.103,
+   "latency_ms_std": 0.333,
+   "peak_vram_allocated_mb": 69.9,
+   "peak_vram_reserved_mb": 110.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838987,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.6757,
+   "full_eval_batched_reference": {
+    "batch_size": 64,
+    "ms_per_batch": 569.22,
+    "peak_vram_allocated_mb": 6436,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "E": {
+   "run": "centerpoint_h100_no_intensity",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 9.533,
+   "latency_ms_median": 9.5,
+   "latency_ms_p90": 9.834,
+   "latency_ms_std": 0.482,
+   "peak_vram_allocated_mb": 69.6,
+   "peak_vram_reserved_mb": 110.0,
+   "weights_vram_mb": 18.5,
+   "params": 4838923,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.6701,
+   "full_eval_batched_reference": {
+    "batch_size": 64,
+    "ms_per_batch": 558.1,
+    "peak_vram_allocated_mb": 6424,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "F": {
+   "run": "centerpoint_osf1_ablation",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 17.788,
+   "latency_ms_median": 17.798,
+   "latency_ms_p90": 18.144,
+   "latency_ms_std": 0.317,
+   "peak_vram_allocated_mb": 261.1,
+   "peak_vram_reserved_mb": 446.0,
+   "weights_vram_mb": 27.0,
+   "params": 7050827,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.7776,
+   "full_eval_batched_reference": {
+    "batch_size": 24,
+    "ms_per_batch": 419.33,
+    "peak_vram_allocated_mb": 5436,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  },
+  "G": {
+   "run": "centerpoint_geopillar_encoder_replk_distributed",
+   "n_timed": 500,
+   "warmup": 50,
+   "batch_size": 1,
+   "precision": "fp32",
+   "latency_ms_mean": 32.23,
+   "latency_ms_median": 32.233,
+   "latency_ms_p90": 32.691,
+   "latency_ms_std": 0.375,
+   "peak_vram_allocated_mb": 213.8,
+   "peak_vram_reserved_mb": 252.0,
+   "weights_vram_mb": 26.8,
+   "params": 6979284,
+   "voxel_size": [
+    0.4,
+    0.4,
+    8.0
+   ],
+   "max_num_points": 8,
+   "max_voxels_test": 40000,
+   "cudnn_benchmark": true,
+   "ap_0.7_carla_test": 0.8113,
+   "full_eval_batched_reference": {
+    "batch_size": 24,
+    "ms_per_batch": 831.87,
+    "peak_vram_allocated_mb": 8465,
+    "note": "from eval_results_carla_test.json; batch sizes differ per run, not comparable"
+   }
+  }
+ }
+}

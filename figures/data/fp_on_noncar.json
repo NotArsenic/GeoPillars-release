@@ -1,0 +1,364 @@
+{
+  "description": "Fraction of false positives (at BEV IoU 0.5 against car GT) that overlap a non-car GT box at BEV IoU >= 0.3. Non-car boxes come from the pkl instance list, i.e. before ObjectNameFilter removes them; the evaluator never sees them, so these detections are scored as hallucinations.",
+  "ann_file": "data/Processed_data/nuscenes_infos_val.pkl",
+  "runs": {
+    "A": {
+      "run": "A",
+      "run_dir": "geo_pillars_h100_intensity",
+      "variant": "baseline",
+      "dump": "work_dirs/preds/A_baseline.npz",
+      "prediction_stats": {
+        "n_frames": 30842,
+        "n_det": 591580,
+        "n_det_per_frame_mean": 19.180986965825824,
+        "n_det_per_frame_max": 44
+      },
+      "settings": {
+        "match_iou_threshold": 0.5,
+        "noncar_overlap_iou_threshold": 0.3,
+        "iou_backend": {
+          "requested": "auto",
+          "resolved": "shapely_rotated",
+          "rotated": true,
+          "shapely_importable": true,
+          "shapely_version": "1.8.5.post1"
+        },
+        "score_bands": [
+          "0.05-0.1",
+          "0.1-0.3",
+          "0.3-0.5",
+          "0.5-0.7",
+          "0.7-1.01"
+        ]
+      },
+      "ap_check": {
+        "AP@0.5": 0.9315,
+        "AP@0.7": 0.8133,
+        "mAP": 0.8724,
+        "mBEVIoU@0.5": 0.8174,
+        "mAOE": 0.07,
+        "mAOE_folded": 0.0469,
+        "iou_rotated": 1.0
+      },
+      "detections": {
+        "total": 591580,
+        "true_positives": 302305,
+        "false_positives": 289275,
+        "fp_fraction": 0.488987
+      },
+      "noncar_gt": {
+        "boxes_by_class": {
+          "bus": 23292,
+          "truck": 21362,
+          "pedestrian": 45703
+        },
+        "frames_with_noncar_gt": 26657
+      },
+      "fp_on_noncar": {
+        "count": 14914,
+        "fraction_of_false_positives": 0.051556,
+        "percent_of_false_positives": 5.156,
+        "by_class": {
+          "truck": 12810,
+          "bus": 2104
+        },
+        "by_class_fraction_of_fp": {
+          "truck": 0.044283,
+          "bus": 0.007273
+        }
+      },
+      "fp_by_score_band": {
+        "totals": {
+          "0.7-1.01": 2011,
+          "0.5-0.7": 12053,
+          "0.3-0.5": 22053,
+          "0.1-0.3": 78150,
+          "0.05-0.1": 175008
+        },
+        "on_noncar": {
+          "0.7-1.01": 78,
+          "0.5-0.7": 935,
+          "0.3-0.5": 3211,
+          "0.1-0.3": 6493,
+          "0.05-0.1": 4197
+        },
+        "on_noncar_fraction": {
+          "0.7-1.01": 0.038787,
+          "0.5-0.7": 0.077574,
+          "0.3-0.5": 0.145604,
+          "0.1-0.3": 0.083084,
+          "0.05-0.1": 0.023982
+        },
+        "on_noncar_by_class": {
+          "0.7-1.01": {
+            "truck": 78
+          },
+          "0.5-0.7": {
+            "truck": 932,
+            "bus": 3
+          },
+          "0.3-0.5": {
+            "truck": 3189,
+            "bus": 22
+          },
+          "0.1-0.3": {
+            "truck": 5795,
+            "bus": 698
+          },
+          "0.05-0.1": {
+            "truck": 2816,
+            "bus": 1381
+          }
+        }
+      },
+      "fp_best_noncar_iou": {
+        "mean": 0.035969,
+        "fraction_above_0": 0.09138,
+        "fraction_above_0p1": 0.069149,
+        "fraction_above_0p3": 0.051556,
+        "fraction_above_0p5": 0.040684,
+        "fraction_above_0p7": 0.017053
+      },
+      "wall_time_s": 354.1
+    },
+    "F": {
+      "run": "F",
+      "run_dir": "centerpoint_osf1_ablation",
+      "variant": "baseline",
+      "dump": "work_dirs/preds/F_baseline.npz",
+      "prediction_stats": {
+        "n_frames": 30842,
+        "n_det": 680132,
+        "n_det_per_frame_mean": 22.052136696712274,
+        "n_det_per_frame_max": 53
+      },
+      "settings": {
+        "match_iou_threshold": 0.5,
+        "noncar_overlap_iou_threshold": 0.3,
+        "iou_backend": {
+          "requested": "auto",
+          "resolved": "shapely_rotated",
+          "rotated": true,
+          "shapely_importable": true,
+          "shapely_version": "1.8.5.post1"
+        },
+        "score_bands": [
+          "0.05-0.1",
+          "0.1-0.3",
+          "0.3-0.5",
+          "0.5-0.7",
+          "0.7-1.01"
+        ]
+      },
+      "ap_check": {
+        "AP@0.5": 0.9247,
+        "AP@0.7": 0.7776,
+        "mAP": 0.8511,
+        "mBEVIoU@0.5": 0.8068,
+        "mAOE": 0.0966,
+        "mAOE_folded": 0.0517,
+        "iou_rotated": 1.0
+      },
+      "detections": {
+        "total": 680132,
+        "true_positives": 299844,
+        "false_positives": 380288,
+        "fp_fraction": 0.559139
+      },
+      "noncar_gt": {
+        "boxes_by_class": {
+          "bus": 23292,
+          "truck": 21362,
+          "pedestrian": 45703
+        },
+        "frames_with_noncar_gt": 26657
+      },
+      "fp_on_noncar": {
+        "count": 22414,
+        "fraction_of_false_positives": 0.05894,
+        "percent_of_false_positives": 5.894,
+        "by_class": {
+          "truck": 18950,
+          "bus": 3464
+        },
+        "by_class_fraction_of_fp": {
+          "truck": 0.049831,
+          "bus": 0.009109
+        }
+      },
+      "fp_by_score_band": {
+        "totals": {
+          "0.7-1.01": 1667,
+          "0.5-0.7": 12249,
+          "0.3-0.5": 26252,
+          "0.1-0.3": 108256,
+          "0.05-0.1": 231864
+        },
+        "on_noncar": {
+          "0.7-1.01": 62,
+          "0.5-0.7": 1024,
+          "0.3-0.5": 5148,
+          "0.1-0.3": 11081,
+          "0.05-0.1": 5099
+        },
+        "on_noncar_fraction": {
+          "0.7-1.01": 0.037193,
+          "0.5-0.7": 0.083599,
+          "0.3-0.5": 0.196099,
+          "0.1-0.3": 0.102359,
+          "0.05-0.1": 0.021991
+        },
+        "on_noncar_by_class": {
+          "0.7-1.01": {
+            "truck": 62
+          },
+          "0.5-0.7": {
+            "truck": 1023,
+            "bus": 1
+          },
+          "0.3-0.5": {
+            "truck": 5098,
+            "bus": 50
+          },
+          "0.1-0.3": {
+            "truck": 9660,
+            "bus": 1421
+          },
+          "0.05-0.1": {
+            "truck": 3107,
+            "bus": 1992
+          }
+        }
+      },
+      "fp_best_noncar_iou": {
+        "mean": 0.042776,
+        "fraction_above_0": 0.11561,
+        "fraction_above_0p1": 0.085659,
+        "fraction_above_0p3": 0.05894,
+        "fraction_above_0p5": 0.045142,
+        "fraction_above_0p7": 0.024863
+      },
+      "wall_time_s": 397.0
+    },
+    "D": {
+      "run": "D",
+      "run_dir": "centerpoint_h100_intensity",
+      "variant": "baseline",
+      "dump": "work_dirs/preds/D_baseline.npz",
+      "prediction_stats": {
+        "n_frames": 30842,
+        "n_det": 1081675,
+        "n_det_per_frame_mean": 35.071493418066275,
+        "n_det_per_frame_max": 150
+      },
+      "settings": {
+        "match_iou_threshold": 0.5,
+        "noncar_overlap_iou_threshold": 0.3,
+        "iou_backend": {
+          "requested": "auto",
+          "resolved": "shapely_rotated",
+          "rotated": true,
+          "shapely_importable": true,
+          "shapely_version": "1.8.5.post1"
+        },
+        "score_bands": [
+          "0.05-0.1",
+          "0.1-0.3",
+          "0.3-0.5",
+          "0.5-0.7",
+          "0.7-1.01"
+        ]
+      },
+      "ap_check": {
+        "AP@0.5": 0.8955,
+        "AP@0.7": 0.6757,
+        "mAP": 0.7856,
+        "mBEVIoU@0.5": 0.7882,
+        "mAOE": 0.0742,
+        "mAOE_folded": 0.0481,
+        "iou_rotated": 1.0
+      },
+      "detections": {
+        "total": 1081675,
+        "true_positives": 296062,
+        "false_positives": 785613,
+        "fp_fraction": 0.726293
+      },
+      "noncar_gt": {
+        "boxes_by_class": {
+          "bus": 23292,
+          "truck": 21362,
+          "pedestrian": 45703
+        },
+        "frames_with_noncar_gt": 26657
+      },
+      "fp_on_noncar": {
+        "count": 20801,
+        "fraction_of_false_positives": 0.026477,
+        "percent_of_false_positives": 2.648,
+        "by_class": {
+          "truck": 17216,
+          "bus": 3585
+        },
+        "by_class_fraction_of_fp": {
+          "truck": 0.021914,
+          "bus": 0.004563
+        }
+      },
+      "fp_by_score_band": {
+        "totals": {
+          "0.7-1.01": 9637,
+          "0.5-0.7": 20166,
+          "0.3-0.5": 30340,
+          "0.1-0.3": 238133,
+          "0.05-0.1": 487337
+        },
+        "on_noncar": {
+          "0.7-1.01": 244,
+          "0.5-0.7": 2194,
+          "0.3-0.5": 4924,
+          "0.1-0.3": 8541,
+          "0.05-0.1": 4898
+        },
+        "on_noncar_fraction": {
+          "0.7-1.01": 0.025319,
+          "0.5-0.7": 0.108797,
+          "0.3-0.5": 0.162294,
+          "0.1-0.3": 0.035867,
+          "0.05-0.1": 0.010051
+        },
+        "on_noncar_by_class": {
+          "0.7-1.01": {
+            "truck": 243,
+            "bus": 1
+          },
+          "0.5-0.7": {
+            "truck": 2184,
+            "bus": 10
+          },
+          "0.3-0.5": {
+            "truck": 4866,
+            "bus": 58
+          },
+          "0.1-0.3": {
+            "truck": 7216,
+            "bus": 1325
+          },
+          "0.05-0.1": {
+            "bus": 2191,
+            "truck": 2707
+          }
+        }
+      },
+      "fp_best_noncar_iou": {
+        "mean": 0.021308,
+        "fraction_above_0": 0.085747,
+        "fraction_above_0p1": 0.049504,
+        "fraction_above_0p3": 0.026477,
+        "fraction_above_0p5": 0.019115,
+        "fraction_above_0p7": 0.008821
+      },
+      "wall_time_s": 614.5
+    }
+  }
+}

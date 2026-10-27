@@ -1,0 +1,183 @@
+{
+ "description": "Frame-level bootstrap of AP@0.7 (and AP@0.5) on the CARLA validation split, from cached per-detection rotated-IoU matches. Bounds the evaluation noise of an AP difference; it does NOT bound training / seed variance, which this tree cannot measure (no seed repeats).",
+ "generated_at": "2026-09-20T22:17:00+00:00",
+ "generated_by": "scripts/figure_data/export_ap_frame_bootstrap.py",
+ "settings": {
+  "ann_file": "data/Processed_data/nuscenes_infos_val.pkl",
+  "n_frames": 30842,
+  "n_gt": 313179,
+  "n_bootstrap": 500,
+  "seed": 0,
+  "ap_method": "r40",
+  "resampling_unit": "frame (with replacement)"
+ },
+ "runs": {
+  "A": {
+   "AP@0.7_full_split": 0.81335,
+   "TP@0.7": 268853,
+   "FP@0.7": 322727,
+   "AP@0.5_full_split": 0.9315,
+   "TP@0.5": 302305,
+   "FP@0.5": 289275,
+   "n_detections": 591580,
+   "AP@0.7_bootstrap": {
+    "mean": 0.81336,
+    "std": 0.00068,
+    "ci95": [
+     0.81198,
+     0.8147
+    ],
+    "width_pp": 0.272
+   }
+  },
+  "B": {
+   "AP@0.7_full_split": 0.81206,
+   "TP@0.7": 268799,
+   "FP@0.7": 321857,
+   "AP@0.5_full_split": 0.9306,
+   "TP@0.5": 302316,
+   "FP@0.5": 288340,
+   "n_detections": 590656,
+   "AP@0.7_bootstrap": {
+    "mean": 0.81208,
+    "std": 0.00071,
+    "ci95": [
+     0.8107,
+     0.81344
+    ],
+    "width_pp": 0.274
+   }
+  },
+  "C": {
+   "AP@0.7_full_split": 0.79425,
+   "TP@0.7": 269208,
+   "FP@0.7": 604709,
+   "AP@0.5_full_split": 0.91925,
+   "TP@0.5": 301197,
+   "FP@0.5": 572720,
+   "n_detections": 873917,
+   "AP@0.7_bootstrap": {
+    "mean": 0.79426,
+    "std": 0.00093,
+    "ci95": [
+     0.79234,
+     0.79609
+    ],
+    "width_pp": 0.375
+   }
+  },
+  "D": {
+   "AP@0.7_full_split": 0.67575,
+   "TP@0.7": 242155,
+   "FP@0.7": 839520,
+   "AP@0.5_full_split": 0.8955,
+   "TP@0.5": 296062,
+   "FP@0.5": 785613,
+   "n_detections": 1081675,
+   "AP@0.7_bootstrap": {
+    "mean": 0.67649,
+    "std": 0.00338,
+    "ci95": [
+     0.67422,
+     0.68975
+    ],
+    "width_pp": 1.554
+   }
+  },
+  "E": {
+   "AP@0.7_full_split": 0.6701,
+   "TP@0.7": 240594,
+   "FP@0.7": 868285,
+   "AP@0.5_full_split": 0.89396,
+   "TP@0.5": 295647,
+   "FP@0.5": 813232,
+   "n_detections": 1108879,
+   "AP@0.7_bootstrap": {
+    "mean": 0.67013,
+    "std": 0.00084,
+    "ci95": [
+     0.66846,
+     0.67169
+    ],
+    "width_pp": 0.324
+   }
+  },
+  "F": {
+   "AP@0.7_full_split": 0.7776,
+   "TP@0.7": 260008,
+   "FP@0.7": 420124,
+   "AP@0.5_full_split": 0.92468,
+   "TP@0.5": 299844,
+   "FP@0.5": 380288,
+   "n_detections": 680132,
+   "AP@0.7_bootstrap": {
+    "mean": 0.77758,
+    "std": 0.00092,
+    "ci95": [
+     0.77562,
+     0.77929
+    ],
+    "width_pp": 0.367
+   }
+  },
+  "G": {
+   "AP@0.7_full_split": 0.81127,
+   "TP@0.7": 267819,
+   "FP@0.7": 329375,
+   "AP@0.5_full_split": 0.93123,
+   "TP@0.5": 302139,
+   "FP@0.5": 295055,
+   "n_detections": 597194,
+   "AP@0.7_bootstrap": {
+    "mean": 0.81125,
+    "std": 0.00082,
+    "ci95": [
+     0.80946,
+     0.81279
+    ],
+    "width_pp": 0.333
+   }
+  }
+ },
+ "pairs": {
+  "A-G": {
+   "label": "NGFM (A) vs no NGFM (G)",
+   "observed_delta_pp": 0.208,
+   "paired_bootstrap": {
+    "mean_pp": 0.212,
+    "std_pp": 0.037,
+    "ci95_pp": [
+     0.143,
+     0.291
+    ],
+    "frac_same_sign": 1.0
+   }
+  },
+  "A-B": {
+   "label": "intensity column, GeoPillars",
+   "observed_delta_pp": 0.129,
+   "paired_bootstrap": {
+    "mean_pp": 0.128,
+    "std_pp": 0.031,
+    "ci95_pp": [
+     0.069,
+     0.187
+    ],
+    "frac_same_sign": 1.0
+   }
+  },
+  "D-E": {
+   "label": "intensity column, CenterPoint",
+   "observed_delta_pp": 0.565,
+   "paired_bootstrap": {
+    "mean_pp": 0.636,
+    "std_pp": 0.304,
+    "ci95_pp": [
+     0.476,
+     1.892
+    ],
+    "frac_same_sign": 1.0
+   }
+  }
+ }
+}

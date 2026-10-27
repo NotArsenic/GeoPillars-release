@@ -1,0 +1,631 @@
+auto_scale_lr = dict(base_batch_size=112, enable=True)
+class_names = [
+    "car",
+]
+custom_hooks = [
+    dict(
+        histogram_interval=200,
+        log_interval=50,
+        ngfm_normal_weight=1.0,
+        type="GeoPillarsWandbHook",
+    ),
+]
+custom_imports = dict(
+    allow_failed_imports=False,
+    imports=[
+        "src.models",
+        "src.data.transforms",
+        "src.hooks",
+        "src.metrics",
+    ],
+)
+data_root = "data/Processed_data"
+dataset_type = "NuScenesDataset"
+default_hooks = dict(
+    checkpoint=dict(interval=1, max_keep_ckpts=5, type="CheckpointHook"),
+    logger=dict(interval=50, type="LoggerHook"),
+    param_scheduler=dict(type="ParamSchedulerHook"),
+    sampler_seed=dict(type="DistSamplerSeedHook"),
+    timer=dict(type="IterTimerHook"),
+    visualization=dict(type="Det3DVisualizationHook"),
+)
+default_scope = "mmdet3d"
+env_cfg = dict(
+    cudnn_benchmark=True,
+    dist_cfg=dict(backend="nccl"),
+    mp_cfg=dict(mp_start_method="fork", opencv_num_threads=0),
+)
+input_modality = dict(use_camera=False, use_lidar=True)
+launcher = "none"
+load_from = None
+log_level = "INFO"
+log_processor = dict(by_epoch=True, type="LogProcessor", window_size=50)
+metainfo = dict(
+    classes=[
+        "car",
+    ]
+)
+model = dict(
+    data_preprocessor=dict(
+        type="GeoPillarsPreprocessor",
+        voxel=True,
+        voxel_layer=dict(
+            max_num_points=8,
+            max_voxels=(
+                16000,
+                40000,
+            ),
+            point_cloud_range=[
+                -51.2,
+                -51.2,
+                -5.0,
+                51.2,
+                51.2,
+                3.0,
+            ],
+            voxel_size=[
+                0.4,
+                0.4,
+                8.0,
+            ],
+        ),
+    ),
+    model=dict(
+        backbone=dict(
+            expand=2,
+            in_channels=64,
+            kernel_sizes=[
+                13,
+                11,
+                9,
+            ],
+            num_blocks=[
+                2,
+                2,
+                4,
+            ],
+            small_kernels=[
+                5,
+                5,
+                5,
+            ],
+            stage_channels=[
+                64,
+                128,
+                256,
+            ],
+            stem_channels=64,
+            type="RepLKBEVBackbone",
+        ),
+        bbox_head=dict(
+            bbox_coder=dict(
+                code_size=9,
+                max_num=500,
+                out_size_factor=1,
+                pc_range=[
+                    -51.2,
+                    -51.2,
+                ],
+                post_center_range=[
+                    -61.2,
+                    -61.2,
+                    -10.0,
+                    61.2,
+                    61.2,
+                    10.0,
+                ],
+                score_threshold=0.05,
+                type="CenterPointBBoxCoder",
+                voxel_size=[
+                    0.4,
+                    0.4,
+                ],
+            ),
+            common_heads=dict(
+                dim=(
+                    3,
+                    2,
+                ),
+                height=(
+                    1,
+                    2,
+                ),
+                reg=(
+                    2,
+                    2,
+                ),
+                rot=(
+                    2,
+                    2,
+                ),
+                vel=(
+                    2,
+                    2,
+                ),
+            ),
+            in_channels=128,
+            loss_bbox=dict(
+                beta=0.44, loss_weight=0.5, reduction="mean", type="mmdet.SmoothL1Loss"
+            ),
+            loss_cls=dict(reduction="mean", type="mmdet.GaussianFocalLoss"),
+            norm_bbox=True,
+            separate_head=dict(final_kernel=3, init_bias=-2.19, type="SeparateHead"),
+            share_conv_channel=64,
+            tasks=[
+                dict(
+                    class_names=[
+                        "car",
+                    ],
+                    num_class=1,
+                ),
+            ],
+            type="CenterHead",
+        ),
+        middle_encoder=dict(
+            grid_size_x=256,
+            grid_size_y=256,
+            in_channels=12,
+            max_points=8,
+            out_channels=64,
+            type="GeoPillarFeatureNet",
+        ),
+        neck=dict(
+            hidden_dim=128, in_channels=256, type="NormalGuidedFeatureModulation"
+        ),
+        normal_target=dict(min_occupancy=0.1, stride=4),
+        type="GeoPillarsModel",
+        upsampler=dict(
+            channels=256, num_stages=2, out_channels=128, type="BEVUpsampler"
+        ),
+        voxel_encoder=dict(
+            max_points=8,
+            point_cloud_range=[
+                -51.2,
+                -51.2,
+                -5.0,
+                51.2,
+                51.2,
+                3.0,
+            ],
+            type="PillarFeatureBuilder",
+            voxel_size=[
+                0.4,
+                0.4,
+                8.0,
+            ],
+        ),
+    ),
+    test_cfg=dict(
+        pts=dict(
+            max_per_img=500,
+            max_pool_nms=False,
+            min_radius=[
+                4,
+                12,
+                10,
+                1,
+                0.85,
+                0.175,
+            ],
+            nms_thr=0.2,
+            nms_type="rotate",
+            out_size_factor=1,
+            pc_range=[
+                -51.2,
+                -51.2,
+            ],
+            post_center_limit_range=[
+                -61.2,
+                -61.2,
+                -10.0,
+                61.2,
+                61.2,
+                10.0,
+            ],
+            post_max_size=150,
+            pre_max_size=1000,
+            score_threshold=0.05,
+            voxel_size=[
+                0.4,
+                0.4,
+            ],
+        )
+    ),
+    train_cfg=dict(
+        ngfm_normal_weight=1.0,
+        pts=dict(
+            code_weights=[
+                0.5,
+                0.5,
+                1.0,
+                2.0,
+                2.0,
+                1.0,
+                2.0,
+                2.0,
+                0,
+                0,
+            ],
+            dense_reg=1,
+            gaussian_overlap=0.25,
+            grid_size=[
+                256,
+                256,
+                1,
+            ],
+            max_objs=500,
+            min_radius=2,
+            out_size_factor=1,
+            point_cloud_range=[
+                -51.2,
+                -51.2,
+                -5.0,
+                51.2,
+                51.2,
+                3.0,
+            ],
+            voxel_size=[
+                0.4,
+                0.4,
+                8.0,
+            ],
+        ),
+    ),
+    type="GeoPillarsDetector",
+)
+optim_wrapper = dict(
+    clip_grad=dict(max_norm=35, norm_type=2),
+    dtype="bfloat16",
+    optimizer=dict(
+        betas=(
+            0.95,
+            0.99,
+        ),
+        lr=8e-06,
+        type="AdamW",
+        weight_decay=0.01,
+    ),
+    type="AmpOptimWrapper",
+)
+param_scheduler = [
+    dict(
+        anneal_strategy="cos",
+        by_epoch=False,
+        div_factor=25,
+        eta_max=0.0002,
+        final_div_factor=10000.0,
+        pct_start=0.1,
+        three_phase=False,
+        total_steps=8820,
+        type="OneCycleLR",
+    ),
+]
+point_cloud_range = [
+    -51.2,
+    -51.2,
+    -5.0,
+    51.2,
+    51.2,
+    3.0,
+]
+resume = False
+test_cfg = dict(type="TestLoop")
+test_dataloader = dict(
+    batch_size=112,
+    dataset=dict(
+        ann_file="nuscenes_infos_val.pkl",
+        box_type_3d="LiDAR",
+        data_prefix=dict(pts="", sweeps=""),
+        data_root="data/Processed_data",
+        metainfo=dict(
+            classes=[
+                "car",
+            ]
+        ),
+        modality=dict(use_camera=False, use_lidar=True),
+        pipeline=[
+            dict(
+                coord_type="LIDAR",
+                load_dim=7,
+                type="LoadPointsFromNpy",
+                use_dim=[
+                    0,
+                    1,
+                    2,
+                    3,
+                ],
+            ),
+            dict(
+                keys=[
+                    "points",
+                ],
+                type="Pack3DDetInputs",
+            ),
+        ],
+        test_mode=True,
+        type="NuScenesDataset",
+    ),
+    drop_last=False,
+    num_workers=22,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(shuffle=False, type="DefaultSampler"),
+)
+test_evaluator = dict(
+    ann_file="data/Processed_data/nuscenes_infos_val.pkl",
+    ap_method="r40",
+    compute_orientation=True,
+    # distance-stratified metrics use the default ranges [(0, 20), (20, 40), (40, inf)] m
+    iou_backend="auto",
+    iou_thresholds=[
+        0.7,
+        0.5,
+    ],
+    mbeviou_mode="single_threshold",
+    pr_save_dir="work_dirs/geo_pillars_h100_intensity/pr_curves",
+    type="GeoPillarsMetric",
+)
+test_pipeline = [
+    dict(
+        coord_type="LIDAR",
+        load_dim=7,
+        type="LoadPointsFromNpy",
+        use_dim=[
+            0,
+            1,
+            2,
+            3,
+        ],
+    ),
+    dict(
+        keys=[
+            "points",
+        ],
+        type="Pack3DDetInputs",
+    ),
+]
+train_cfg = dict(max_epochs=8, type="EpochBasedTrainLoop", val_interval=2)
+train_dataloader = dict(
+    batch_size=112,
+    dataset=dict(
+        ann_file="nuscenes_infos_train.pkl",
+        box_type_3d="LiDAR",
+        data_prefix=dict(pts="", sweeps=""),
+        data_root="data/Processed_data",
+        metainfo=dict(
+            classes=[
+                "car",
+            ]
+        ),
+        modality=dict(use_camera=False, use_lidar=True),
+        pipeline=[
+            dict(coord_type="LIDAR", load_dim=7, type="LoadPointsFromNpy", use_dim=7),
+            dict(type="LoadAnnotations3D", with_bbox_3d=True, with_label_3d=True),
+            dict(
+                rot_range=[
+                    -0.3925,
+                    0.3925,
+                ],
+                scale_ratio_range=[
+                    0.95,
+                    1.05,
+                ],
+                translation_std=[
+                    0,
+                    0,
+                    0,
+                ],
+                type="GlobalRotScaleTrans",
+            ),
+            dict(flip_ratio_bev_horizontal=0.5, type="RandomFlip3D"),
+            dict(
+                point_cloud_range=[
+                    -51.2,
+                    -51.2,
+                    -5.0,
+                    51.2,
+                    51.2,
+                    3.0,
+                ],
+                type="PointsRangeFilter",
+            ),
+            dict(
+                point_cloud_range=[
+                    -51.2,
+                    -51.2,
+                    -5.0,
+                    51.2,
+                    51.2,
+                    3.0,
+                ],
+                type="ObjectRangeFilter",
+            ),
+            dict(
+                classes=[
+                    "car",
+                ],
+                type="ObjectNameFilter",
+            ),
+            dict(
+                normal_dims=(
+                    4,
+                    5,
+                    6,
+                ),
+                point_cloud_range=[
+                    -51.2,
+                    -51.2,
+                    -5.0,
+                    51.2,
+                    51.2,
+                    3.0,
+                ],
+                type="ScatterNormalsToBEV",
+                voxel_size=[
+                    0.4,
+                    0.4,
+                ],
+            ),
+            dict(type="PointShuffle"),
+            dict(
+                keys=[
+                    "points",
+                    "gt_bboxes_3d",
+                    "gt_labels_3d",
+                ],
+                type="PackGeoPillarsInputs",
+            ),
+        ],
+        test_mode=False,
+        type="NuScenesDataset",
+    ),
+    num_workers=22,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(shuffle=True, type="DefaultSampler"),
+)
+train_pipeline = [
+    dict(coord_type="LIDAR", load_dim=7, type="LoadPointsFromNpy", use_dim=7),
+    dict(type="LoadAnnotations3D", with_bbox_3d=True, with_label_3d=True),
+    dict(
+        rot_range=[
+            -0.3925,
+            0.3925,
+        ],
+        scale_ratio_range=[
+            0.95,
+            1.05,
+        ],
+        translation_std=[
+            0,
+            0,
+            0,
+        ],
+        type="GlobalRotScaleTrans",
+    ),
+    dict(flip_ratio_bev_horizontal=0.5, type="RandomFlip3D"),
+    dict(
+        point_cloud_range=[
+            -51.2,
+            -51.2,
+            -5.0,
+            51.2,
+            51.2,
+            3.0,
+        ],
+        type="PointsRangeFilter",
+    ),
+    dict(
+        point_cloud_range=[
+            -51.2,
+            -51.2,
+            -5.0,
+            51.2,
+            51.2,
+            3.0,
+        ],
+        type="ObjectRangeFilter",
+    ),
+    dict(
+        classes=[
+            "car",
+        ],
+        type="ObjectNameFilter",
+    ),
+    dict(
+        normal_dims=(
+            4,
+            5,
+            6,
+        ),
+        point_cloud_range=[
+            -51.2,
+            -51.2,
+            -5.0,
+            51.2,
+            51.2,
+            3.0,
+        ],
+        type="ScatterNormalsToBEV",
+        voxel_size=[
+            0.4,
+            0.4,
+        ],
+    ),
+    dict(type="PointShuffle"),
+    dict(
+        keys=[
+            "points",
+            "gt_bboxes_3d",
+            "gt_labels_3d",
+        ],
+        type="PackGeoPillarsInputs",
+    ),
+]
+val_cfg = dict(type="ValLoop")
+val_dataloader = dict(
+    batch_size=112,
+    dataset=dict(
+        ann_file="nuscenes_infos_val.pkl",
+        box_type_3d="LiDAR",
+        data_prefix=dict(pts="", sweeps=""),
+        data_root="data/Processed_data",
+        metainfo=dict(
+            classes=[
+                "car",
+            ]
+        ),
+        modality=dict(use_camera=False, use_lidar=True),
+        pipeline=[
+            dict(
+                coord_type="LIDAR",
+                load_dim=7,
+                type="LoadPointsFromNpy",
+                use_dim=[
+                    0,
+                    1,
+                    2,
+                    3,
+                ],
+            ),
+            dict(
+                keys=[
+                    "points",
+                ],
+                type="Pack3DDetInputs",
+            ),
+        ],
+        test_mode=True,
+        type="NuScenesDataset",
+    ),
+    drop_last=False,
+    num_workers=22,
+    persistent_workers=True,
+    pin_memory=True,
+    sampler=dict(shuffle=False, type="DefaultSampler"),
+)
+val_evaluator = dict(
+    ann_file="data/Processed_data/nuscenes_infos_val.pkl",
+    ap_method="r40",
+    compute_orientation=True,
+    # distance-stratified metrics use the default ranges [(0, 20), (20, 40), (40, inf)] m
+    iou_backend="auto",
+    iou_thresholds=[
+        0.7,
+        0.5,
+    ],
+    mbeviou_mode="single_threshold",
+    pr_save_dir="work_dirs/geo_pillars_h100_intensity/pr_curves",
+    type="GeoPillarsMetric",
+)
+vis_backends = [
+    dict(type="LocalVisBackend"),
+]
+visualizer = dict(
+    name="visualizer",
+    type="Det3DLocalVisualizer",
+    vis_backends=[
+        dict(type="LocalVisBackend"),
+    ],
+)
+work_dir = "work_dirs/geo_pillars_h100_intensity"

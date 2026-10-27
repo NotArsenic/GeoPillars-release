@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+modifiedLibs/.build/
+
+# datasets, downloaded checkpoints and run outputs
+/data/
+/checkpoints/
+work_dirs/
+*.pth
+
+# PlotNeuralNet is cloned here to build the diagrams (see README)
+scripts/diagrams/PlotNeuralNet/
+
+.env
+.nfs*

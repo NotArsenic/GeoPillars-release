@@ -1,0 +1,1053 @@
+{
+  "description": "Zero-shot nuScenes evaluation of the CARLA-trained released checkpoints: keyframes of nuScenes trainval lidar blobs 01+02 (6,743 single-sweep scans, 170 scenes), car class, current GeoPillarsMetric.",
+  "generated_at": "2026-09-14T14:18:24+00:00",
+  "environment": {
+    "python": "3.10.20",
+    "torch": "2.7.1+cu128",
+    "gpu": "NVIDIA GeForce RTX 5060 Ti",
+    "git_commit": "cf2167ccadd36958340473491adc7e67c2a70705",
+    "metric_file_sha256": "1e3323f002f49b13fe937ca2ef6b98079974b40f354161dd0db439c004580719",
+    "metric_file_modified_vs_HEAD": false
+  },
+  "notes": [
+    "nuScenes intensity (0-255) is overwritten with 1.0 for every point, because every CARLA training scan has intensity exactly 1.0. xyz-only runs never read the column.",
+    "GT follows the CARLA test protocol: a car counts only if num_lidar_pts >= 5 and it lies within 50 m of the sensor (bbox_3d_isvalid). Other cars are ignored as GT, so detections on them count as false positives, exactly as in the CARLA pkl where they were removed.",
+    "Scans are single-sweep keyframes from trainval blobs 01+02, scenes from both the official train (5,512 scans) and val (1,231 scans) splits; no model saw nuScenes during training.",
+    "carla_test holds the same run/epoch on the CARLA test split (work_dirs/eval_carla_test). drop_pp = (nuScenes - CARLA) * 100; retained_pct = nuScenes / CARLA * 100."
+  ],
+  "runs": {
+    "geo_pillars_h100_intensity": {
+      "paper_role": "headline",
+      "setup": "Full GeoPillars (NGFM): 0.4 m pillars, 8 pts, max_voxels=(16000,40000), OSF=1",
+      "config": "config/geo_pillars_h100_intensity.py",
+      "epochs": {
+        "8": {
+          "run": "geo_pillars_h100_intensity",
+          "epoch": 8,
+          "checkpoint": "checkpoints/geo_pillars_h100_intensity/epoch_8.pth",
+          "checkpoint_sha256": "e16161a972e2e250911de6d787a6f7eb0ac7d2d6469d68d12d162deb084125e7",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/geo_pillars_h100_intensity.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.1823,
+            "GeoPillars/AP@0.5@0-20m": 0.3689,
+            "GeoPillars/AP@0.5@20-40m": 0.0617,
+            "GeoPillars/AP@0.5@40m+": 0.0213,
+            "GeoPillars/AP@0.7": 0.0592,
+            "GeoPillars/AP@0.7@0-20m": 0.1291,
+            "GeoPillars/AP@0.7@20-40m": 0.0139,
+            "GeoPillars/AP@0.7@40m+": 0.0026,
+            "GeoPillars/car_AOE": 0.9964,
+            "GeoPillars/car_AP@0.5": 0.1823,
+            "GeoPillars/car_AP@0.5@0-20m": 0.3689,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0617,
+            "GeoPillars/car_AP@0.5@40m+": 0.0213,
+            "GeoPillars/car_AP@0.7": 0.0592,
+            "GeoPillars/car_AP@0.7@0-20m": 0.1291,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0139,
+            "GeoPillars/car_AP@0.7@40m+": 0.0026,
+            "GeoPillars/mAOE": 0.9964,
+            "GeoPillars/mAOE@0-20m": 0.8763,
+            "GeoPillars/mAOE@20-40m": 1.192,
+            "GeoPillars/mAOE@40m+": 1.1784,
+            "GeoPillars/mAP": 0.1207,
+            "GeoPillars/mAP@0-20m": 0.249,
+            "GeoPillars/mAP@20-40m": 0.0378,
+            "GeoPillars/mAP@40m+": 0.0119,
+            "GeoPillars/mBEVIoU": 0.7181
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 24,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 308.5,
+            "peak_gpu_mem_allocated_mb": 10764,
+            "peak_gpu_mem_reserved_mb": 11140,
+            "params_total": 7276116,
+            "model_forward_ms_per_batch_mean": 891.07,
+            "model_forward_fps_at_batch": 26.9,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/geo_pillars_h100_intensity/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T13:52:46+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/geo_pillars_h100_intensity/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.8133,
+              "GeoPillars/AP@0.5": 0.9315,
+              "GeoPillars/mAP": 0.8724,
+              "GeoPillars/mBEVIoU": 0.8287,
+              "GeoPillars/mAOE": 0.07,
+              "GeoPillars/AP@0.7@0-20m": 0.9046,
+              "GeoPillars/AP@0.7@20-40m": 0.7603,
+              "GeoPillars/AP@0.7@40m+": 0.6191
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -75.41,
+            "GeoPillars/AP@0.5": -74.92,
+            "GeoPillars/mAP": -75.17,
+            "GeoPillars/mBEVIoU": -11.06,
+            "GeoPillars/mAOE": 92.64,
+            "GeoPillars/AP@0.7@0-20m": -77.55,
+            "GeoPillars/AP@0.7@20-40m": -74.64,
+            "GeoPillars/AP@0.7@40m+": -61.65
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 7.3,
+            "GeoPillars/AP@0.5": 19.6,
+            "GeoPillars/mAP": 13.8,
+            "GeoPillars/mBEVIoU": 86.7,
+            "GeoPillars/AP@0.7@0-20m": 14.3,
+            "GeoPillars/AP@0.7@20-40m": 1.8,
+            "GeoPillars/AP@0.7@40m+": 0.4
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)"
+    },
+    "geo_pillars_h100_nointensity_final": {
+      "paper_role": "intensity ablation (GeoPillars)",
+      "setup": "Full GeoPillars (NGFM), xyz only",
+      "config": "config/geo_pillars_h100_nointensity_final.py",
+      "epochs": {
+        "8": {
+          "run": "geo_pillars_h100_nointensity_final",
+          "epoch": 8,
+          "checkpoint": "checkpoints/geo_pillars_h100_nointensity_final/epoch_8.pth",
+          "checkpoint_sha256": "173e8c32883edc4fa69eb45471346834b07c1e4a5cc3a44ced9e3ecd98cdf36e",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/geo_pillars_h100_nointensity_final.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": [
+              0,
+              1,
+              2
+            ],
+            "input_features": "xyz",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.1862,
+            "GeoPillars/AP@0.5@0-20m": 0.3653,
+            "GeoPillars/AP@0.5@20-40m": 0.0653,
+            "GeoPillars/AP@0.5@40m+": 0.0247,
+            "GeoPillars/AP@0.7": 0.0664,
+            "GeoPillars/AP@0.7@0-20m": 0.1462,
+            "GeoPillars/AP@0.7@20-40m": 0.0152,
+            "GeoPillars/AP@0.7@40m+": 0.0031,
+            "GeoPillars/car_AOE": 1.0822,
+            "GeoPillars/car_AP@0.5": 0.1862,
+            "GeoPillars/car_AP@0.5@0-20m": 0.3653,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0653,
+            "GeoPillars/car_AP@0.5@40m+": 0.0247,
+            "GeoPillars/car_AP@0.7": 0.0664,
+            "GeoPillars/car_AP@0.7@0-20m": 0.1462,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0152,
+            "GeoPillars/car_AP@0.7@40m+": 0.0031,
+            "GeoPillars/mAOE": 1.0822,
+            "GeoPillars/mAOE@0-20m": 0.9762,
+            "GeoPillars/mAOE@20-40m": 1.2603,
+            "GeoPillars/mAOE@40m+": 1.1653,
+            "GeoPillars/mAP": 0.1263,
+            "GeoPillars/mAP@0-20m": 0.2558,
+            "GeoPillars/mAP@20-40m": 0.0403,
+            "GeoPillars/mAP@40m+": 0.0139,
+            "GeoPillars/mBEVIoU": 0.7206
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 24,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 308.5,
+            "peak_gpu_mem_allocated_mb": 10756,
+            "peak_gpu_mem_reserved_mb": 11516,
+            "params_total": 7276052,
+            "model_forward_ms_per_batch_mean": 889.72,
+            "model_forward_fps_at_batch": 27.0,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/geo_pillars_h100_nointensity_final/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T13:58:01+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/geo_pillars_h100_nointensity_final/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.8121,
+              "GeoPillars/AP@0.5": 0.9306,
+              "GeoPillars/mAP": 0.8713,
+              "GeoPillars/mBEVIoU": 0.8293,
+              "GeoPillars/mAOE": 0.0748,
+              "GeoPillars/AP@0.7@0-20m": 0.9007,
+              "GeoPillars/AP@0.7@20-40m": 0.746,
+              "GeoPillars/AP@0.7@40m+": 0.6186
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -74.57,
+            "GeoPillars/AP@0.5": -74.44,
+            "GeoPillars/mAP": -74.5,
+            "GeoPillars/mBEVIoU": -10.87,
+            "GeoPillars/mAOE": 100.74,
+            "GeoPillars/AP@0.7@0-20m": -75.45,
+            "GeoPillars/AP@0.7@20-40m": -73.08,
+            "GeoPillars/AP@0.7@40m+": -61.55
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 8.2,
+            "GeoPillars/AP@0.5": 20.0,
+            "GeoPillars/mAP": 14.5,
+            "GeoPillars/mBEVIoU": 86.9,
+            "GeoPillars/AP@0.7@0-20m": 16.2,
+            "GeoPillars/AP@0.7@20-40m": 2.0,
+            "GeoPillars/AP@0.7@40m+": 0.5
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz"
+    },
+    "centerpoint_h100_intensity_original": {
+      "paper_role": "CenterPoint at native budget (\"properly configured\" baseline)",
+      "setup": "CenterPoint: 0.2 m voxels, 20 pts, max_voxels=(30000,40000), OSF=4",
+      "config": "config/centerpoint_h100_intensity_original.py",
+      "epochs": {
+        "8": {
+          "run": "centerpoint_h100_intensity_original",
+          "epoch": 8,
+          "checkpoint": "checkpoints/centerpoint_h100_intensity_original/epoch_8.pth",
+          "checkpoint_sha256": "08aaee926ca693057136b8f3779a33650230218b7f4fbd4cbda40c2fd09e1597",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/centerpoint_h100_intensity_original.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": 4,
+            "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.207,
+            "GeoPillars/AP@0.5@0-20m": 0.4023,
+            "GeoPillars/AP@0.5@20-40m": 0.0772,
+            "GeoPillars/AP@0.5@40m+": 0.0275,
+            "GeoPillars/AP@0.7": 0.0969,
+            "GeoPillars/AP@0.7@0-20m": 0.2151,
+            "GeoPillars/AP@0.7@20-40m": 0.0232,
+            "GeoPillars/AP@0.7@40m+": 0.0038,
+            "GeoPillars/car_AOE": 0.8429,
+            "GeoPillars/car_AP@0.5": 0.207,
+            "GeoPillars/car_AP@0.5@0-20m": 0.4023,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0772,
+            "GeoPillars/car_AP@0.5@40m+": 0.0275,
+            "GeoPillars/car_AP@0.7": 0.0969,
+            "GeoPillars/car_AP@0.7@0-20m": 0.2151,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0232,
+            "GeoPillars/car_AP@0.7@40m+": 0.0038,
+            "GeoPillars/mAOE": 0.8429,
+            "GeoPillars/mAOE@0-20m": 0.6364,
+            "GeoPillars/mAOE@20-40m": 1.1101,
+            "GeoPillars/mAOE@40m+": 1.2135,
+            "GeoPillars/mAP": 0.1519,
+            "GeoPillars/mAP@0-20m": 0.3087,
+            "GeoPillars/mAP@20-40m": 0.0502,
+            "GeoPillars/mAP@40m+": 0.0157,
+            "GeoPillars/mBEVIoU": 0.7356
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 16,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 230.0,
+            "peak_gpu_mem_allocated_mb": 9440,
+            "peak_gpu_mem_reserved_mb": 12032,
+            "params_total": 4838987,
+            "model_forward_ms_per_batch_mean": 292.71,
+            "model_forward_fps_at_batch": 54.7,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/centerpoint_h100_intensity_original/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T14:01:56+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/centerpoint_h100_intensity_original/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.7942,
+              "GeoPillars/AP@0.5": 0.9192,
+              "GeoPillars/mAP": 0.8567,
+              "GeoPillars/mBEVIoU": 0.8498,
+              "GeoPillars/mAOE": 0.1489,
+              "GeoPillars/AP@0.7@0-20m": 0.8926,
+              "GeoPillars/AP@0.7@20-40m": 0.7231,
+              "GeoPillars/AP@0.7@40m+": 0.6052
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -69.73,
+            "GeoPillars/AP@0.5": -71.22,
+            "GeoPillars/mAP": -70.48,
+            "GeoPillars/mBEVIoU": -11.42,
+            "GeoPillars/mAOE": 69.4,
+            "GeoPillars/AP@0.7@0-20m": -67.75,
+            "GeoPillars/AP@0.7@20-40m": -69.99,
+            "GeoPillars/AP@0.7@40m+": -60.14
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 12.2,
+            "GeoPillars/AP@0.5": 22.5,
+            "GeoPillars/mAP": 17.7,
+            "GeoPillars/mBEVIoU": 86.6,
+            "GeoPillars/AP@0.7@0-20m": 24.1,
+            "GeoPillars/AP@0.7@20-40m": 3.2,
+            "GeoPillars/AP@0.7@40m+": 0.6
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)"
+    },
+    "centerpoint_h100_intensity": {
+      "paper_role": "CenterPoint at GeoPillars budget (initial gap)",
+      "setup": "CenterPoint: 0.4 m, 8 pts, max_voxels=(16000,40000), OSF=4",
+      "config": "config/centerpoint_h100_intensity.py",
+      "epochs": {
+        "8": {
+          "run": "centerpoint_h100_intensity",
+          "epoch": 8,
+          "checkpoint": "checkpoints/centerpoint_h100_intensity/epoch_8.pth",
+          "checkpoint_sha256": "22d193c5da2b12850632c24b0ed837af5f16a64a057b193796d5dd912f20bd72",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/centerpoint_h100_intensity.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": 4,
+            "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.1228,
+            "GeoPillars/AP@0.5@0-20m": 0.2447,
+            "GeoPillars/AP@0.5@20-40m": 0.0375,
+            "GeoPillars/AP@0.5@40m+": 0.0101,
+            "GeoPillars/AP@0.7": 0.0283,
+            "GeoPillars/AP@0.7@0-20m": 0.0659,
+            "GeoPillars/AP@0.7@20-40m": 0.0042,
+            "GeoPillars/AP@0.7@40m+": 0.0011,
+            "GeoPillars/car_AOE": 1.0099,
+            "GeoPillars/car_AP@0.5": 0.1228,
+            "GeoPillars/car_AP@0.5@0-20m": 0.2447,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0375,
+            "GeoPillars/car_AP@0.5@40m+": 0.0101,
+            "GeoPillars/car_AP@0.7": 0.0283,
+            "GeoPillars/car_AP@0.7@0-20m": 0.0659,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0042,
+            "GeoPillars/car_AP@0.7@40m+": 0.0011,
+            "GeoPillars/mAOE": 1.0099,
+            "GeoPillars/mAOE@0-20m": 0.8571,
+            "GeoPillars/mAOE@20-40m": 1.2429,
+            "GeoPillars/mAOE@40m+": 1.1448,
+            "GeoPillars/mAP": 0.0756,
+            "GeoPillars/mAP@0-20m": 0.1553,
+            "GeoPillars/mAP@20-40m": 0.0209,
+            "GeoPillars/mAP@40m+": 0.0056,
+            "GeoPillars/mBEVIoU": 0.6934
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 64,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 227.5,
+            "peak_gpu_mem_allocated_mb": 4456,
+            "peak_gpu_mem_reserved_mb": 9794,
+            "params_total": 4838987,
+            "model_forward_ms_per_batch_mean": 643.89,
+            "model_forward_fps_at_batch": 99.4,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/centerpoint_h100_intensity/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T14:05:48+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/centerpoint_h100_intensity/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.6757,
+              "GeoPillars/AP@0.5": 0.8955,
+              "GeoPillars/mAP": 0.7856,
+              "GeoPillars/mBEVIoU": 0.8047,
+              "GeoPillars/mAOE": 0.0742,
+              "GeoPillars/AP@0.7@0-20m": 0.8009,
+              "GeoPillars/AP@0.7@20-40m": 0.5967,
+              "GeoPillars/AP@0.7@40m+": 0.4469
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -64.74,
+            "GeoPillars/AP@0.5": -77.27,
+            "GeoPillars/mAP": -71.0,
+            "GeoPillars/mBEVIoU": -11.13,
+            "GeoPillars/mAOE": 93.57,
+            "GeoPillars/AP@0.7@0-20m": -73.5,
+            "GeoPillars/AP@0.7@20-40m": -59.25,
+            "GeoPillars/AP@0.7@40m+": -44.58
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 4.2,
+            "GeoPillars/AP@0.5": 13.7,
+            "GeoPillars/mAP": 9.6,
+            "GeoPillars/mBEVIoU": 86.2,
+            "GeoPillars/AP@0.7@0-20m": 8.2,
+            "GeoPillars/AP@0.7@20-40m": 0.7,
+            "GeoPillars/AP@0.7@40m+": 0.2
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)"
+    },
+    "centerpoint_h100_no_intensity": {
+      "paper_role": "intensity ablation (CenterPoint)",
+      "setup": "CenterPoint: 0.4 m, 8 pts, max_voxels=(16000,40000), OSF=4, xyz only",
+      "config": "config/centerpoint_h100_no_intensity.py",
+      "epochs": {
+        "8": {
+          "run": "centerpoint_h100_no_intensity",
+          "epoch": 8,
+          "checkpoint": "checkpoints/centerpoint_h100_no_intensity/epoch_8.pth",
+          "checkpoint_sha256": "d9f7679b991c336dd8f362ad3c53522f15fca41495657eb006735760054389c4",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/centerpoint_h100_no_intensity.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": 3,
+            "input_features": "xyz",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.119,
+            "GeoPillars/AP@0.5@0-20m": 0.2433,
+            "GeoPillars/AP@0.5@20-40m": 0.0359,
+            "GeoPillars/AP@0.5@40m+": 0.0105,
+            "GeoPillars/AP@0.7": 0.0246,
+            "GeoPillars/AP@0.7@0-20m": 0.061,
+            "GeoPillars/AP@0.7@20-40m": 0.0033,
+            "GeoPillars/AP@0.7@40m+": 0.0009,
+            "GeoPillars/car_AOE": 1.0133,
+            "GeoPillars/car_AP@0.5": 0.119,
+            "GeoPillars/car_AP@0.5@0-20m": 0.2433,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0359,
+            "GeoPillars/car_AP@0.5@40m+": 0.0105,
+            "GeoPillars/car_AP@0.7": 0.0246,
+            "GeoPillars/car_AP@0.7@0-20m": 0.061,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0033,
+            "GeoPillars/car_AP@0.7@40m+": 0.0009,
+            "GeoPillars/mAOE": 1.0133,
+            "GeoPillars/mAOE@0-20m": 0.8715,
+            "GeoPillars/mAOE@20-40m": 1.2293,
+            "GeoPillars/mAOE@40m+": 1.1165,
+            "GeoPillars/mAP": 0.0718,
+            "GeoPillars/mAP@0-20m": 0.1521,
+            "GeoPillars/mAP@20-40m": 0.0196,
+            "GeoPillars/mAP@40m+": 0.0057,
+            "GeoPillars/mBEVIoU": 0.6887
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 64,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 216.5,
+            "peak_gpu_mem_allocated_mb": 4451,
+            "peak_gpu_mem_reserved_mb": 9780,
+            "params_total": 4838923,
+            "model_forward_ms_per_batch_mean": 632.16,
+            "model_forward_fps_at_batch": 101.2,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/centerpoint_h100_no_intensity/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T14:09:30+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/centerpoint_h100_no_intensity/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.6701,
+              "GeoPillars/AP@0.5": 0.894,
+              "GeoPillars/mAP": 0.782,
+              "GeoPillars/mBEVIoU": 0.8012,
+              "GeoPillars/mAOE": 0.0786,
+              "GeoPillars/AP@0.7@0-20m": 0.7955,
+              "GeoPillars/AP@0.7@20-40m": 0.5921,
+              "GeoPillars/AP@0.7@40m+": 0.443
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -64.55,
+            "GeoPillars/AP@0.5": -77.5,
+            "GeoPillars/mAP": -71.02,
+            "GeoPillars/mBEVIoU": -11.25,
+            "GeoPillars/mAOE": 93.47,
+            "GeoPillars/AP@0.7@0-20m": -73.45,
+            "GeoPillars/AP@0.7@20-40m": -58.88,
+            "GeoPillars/AP@0.7@40m+": -44.21
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 3.7,
+            "GeoPillars/AP@0.5": 13.3,
+            "GeoPillars/mAP": 9.2,
+            "GeoPillars/mBEVIoU": 86.0,
+            "GeoPillars/AP@0.7@0-20m": 7.7,
+            "GeoPillars/AP@0.7@20-40m": 0.6,
+            "GeoPillars/AP@0.7@40m+": 0.2
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz"
+    },
+    "centerpoint_osf1_ablation": {
+      "paper_role": "head-resolution rung",
+      "setup": "CenterPoint: 0.4 m, 8 pts, max_voxels=(16000,40000), OSF=1",
+      "config": "config/centerpoint_osf1_ablation.py",
+      "epochs": {
+        "8": {
+          "run": "centerpoint_osf1_ablation",
+          "epoch": 8,
+          "checkpoint": "checkpoints/centerpoint_osf1_ablation/epoch_8.pth",
+          "checkpoint_sha256": "0dde54ff132390722d444b588656da2c183b8d94e9f8d923235152d112fed002",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/centerpoint_osf1_ablation.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": 4,
+            "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.1511,
+            "GeoPillars/AP@0.5@0-20m": 0.2976,
+            "GeoPillars/AP@0.5@20-40m": 0.0545,
+            "GeoPillars/AP@0.5@40m+": 0.0181,
+            "GeoPillars/AP@0.7": 0.0456,
+            "GeoPillars/AP@0.7@0-20m": 0.1025,
+            "GeoPillars/AP@0.7@20-40m": 0.0101,
+            "GeoPillars/AP@0.7@40m+": 0.0019,
+            "GeoPillars/car_AOE": 1.0045,
+            "GeoPillars/car_AP@0.5": 0.1511,
+            "GeoPillars/car_AP@0.5@0-20m": 0.2976,
+            "GeoPillars/car_AP@0.5@20-40m": 0.0545,
+            "GeoPillars/car_AP@0.5@40m+": 0.0181,
+            "GeoPillars/car_AP@0.7": 0.0456,
+            "GeoPillars/car_AP@0.7@0-20m": 0.1025,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0101,
+            "GeoPillars/car_AP@0.7@40m+": 0.0019,
+            "GeoPillars/mAOE": 1.0045,
+            "GeoPillars/mAOE@0-20m": 0.8901,
+            "GeoPillars/mAOE@20-40m": 1.1676,
+            "GeoPillars/mAOE@40m+": 1.1582,
+            "GeoPillars/mAP": 0.0983,
+            "GeoPillars/mAP@0-20m": 0.2,
+            "GeoPillars/mAP@20-40m": 0.0323,
+            "GeoPillars/mAP@40m+": 0.01,
+            "GeoPillars/mBEVIoU": 0.7073
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 24,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 211.6,
+            "peak_gpu_mem_allocated_mb": 10706,
+            "peak_gpu_mem_reserved_mb": 13908,
+            "params_total": 7050827,
+            "model_forward_ms_per_batch_mean": 466.04,
+            "model_forward_fps_at_batch": 51.5,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/centerpoint_osf1_ablation/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T14:13:06+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/centerpoint_osf1_ablation/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.7776,
+              "GeoPillars/AP@0.5": 0.9247,
+              "GeoPillars/mAP": 0.8511,
+              "GeoPillars/mBEVIoU": 0.8199,
+              "GeoPillars/mAOE": 0.0966,
+              "GeoPillars/AP@0.7@0-20m": 0.8772,
+              "GeoPillars/AP@0.7@20-40m": 0.7089,
+              "GeoPillars/AP@0.7@40m+": 0.57
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -73.2,
+            "GeoPillars/AP@0.5": -77.36,
+            "GeoPillars/mAP": -75.28,
+            "GeoPillars/mBEVIoU": -11.26,
+            "GeoPillars/mAOE": 90.79,
+            "GeoPillars/AP@0.7@0-20m": -77.47,
+            "GeoPillars/AP@0.7@20-40m": -69.88,
+            "GeoPillars/AP@0.7@40m+": -56.81
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 5.9,
+            "GeoPillars/AP@0.5": 16.3,
+            "GeoPillars/mAP": 11.5,
+            "GeoPillars/mBEVIoU": 86.3,
+            "GeoPillars/AP@0.7@0-20m": 11.7,
+            "GeoPillars/AP@0.7@20-40m": 1.4,
+            "GeoPillars/AP@0.7@40m+": 0.3
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)"
+    },
+    "centerpoint_geopillar_encoder_replk_distributed": {
+      "paper_role": "NGFM contribution (everything but NGFM)",
+      "setup": "CenterPoint + GeoPillar encoder + RepLK + BEVUpsampler, no NGFM, OSF=1",
+      "config": "config/centerpoint_geopillar_encoder_replk_distributed.py",
+      "epochs": {
+        "8": {
+          "run": "centerpoint_geopillar_encoder_replk_distributed",
+          "epoch": 8,
+          "checkpoint": "checkpoints/centerpoint_geopillar_encoder_replk_distributed/epoch_8.pth",
+          "checkpoint_sha256": "84048d14d30acfe167947a0d54a9da3c1cfaa5c5e434aec53dc36edb26e3dc1f",
+          "checkpoint_meta_epoch": 8,
+          "checkpoint_meta_iter": 8816,
+          "config": "config/centerpoint_geopillar_encoder_replk_distributed.py",
+          "smoke_subset": null,
+          "data": {
+            "dataset": "nusc_zeroshot",
+            "data_root": "data/nuscenes_zeroshot/",
+            "ann_file": "nuscenes_infos_zeroshot_npy.pkl",
+            "evaluator_ann_file": "data/nuscenes_zeroshot/nuscenes_infos_zeroshot_npy.pkl",
+            "num_samples_evaluated": 6743,
+            "load_dim": 4,
+            "use_dim": 4,
+            "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+            "test_max_voxels": 40000
+          },
+          "metric_config": {
+            "type": "GeoPillarsMetric",
+            "ap_method": "r40",
+            "iou_thresholds": [
+              0.5,
+              0.7
+            ],
+            "distance_ranges_m": [
+              [
+                0,
+                20
+              ],
+              [
+                20,
+                40
+              ],
+              [
+                40,
+                null
+              ]
+            ],
+            "aoe_iou_threshold": 0.5,
+            "note": "metric values are rounded to 4 decimals by GeoPillarsMetric; AP in [0,1], AOE in radians"
+          },
+          "metrics": {
+            "GeoPillars/AP@0.5": 0.1619,
+            "GeoPillars/AP@0.5@0-20m": 0.3189,
+            "GeoPillars/AP@0.5@20-40m": 0.056,
+            "GeoPillars/AP@0.5@40m+": 0.0235,
+            "GeoPillars/AP@0.7": 0.0562,
+            "GeoPillars/AP@0.7@0-20m": 0.1261,
+            "GeoPillars/AP@0.7@20-40m": 0.0113,
+            "GeoPillars/AP@0.7@40m+": 0.0032,
+            "GeoPillars/car_AOE": 0.9969,
+            "GeoPillars/car_AP@0.5": 0.1619,
+            "GeoPillars/car_AP@0.5@0-20m": 0.3189,
+            "GeoPillars/car_AP@0.5@20-40m": 0.056,
+            "GeoPillars/car_AP@0.5@40m+": 0.0235,
+            "GeoPillars/car_AP@0.7": 0.0562,
+            "GeoPillars/car_AP@0.7@0-20m": 0.1261,
+            "GeoPillars/car_AP@0.7@20-40m": 0.0113,
+            "GeoPillars/car_AP@0.7@40m+": 0.0032,
+            "GeoPillars/mAOE": 0.9969,
+            "GeoPillars/mAOE@0-20m": 0.8542,
+            "GeoPillars/mAOE@20-40m": 1.2358,
+            "GeoPillars/mAOE@40m+": 1.1745,
+            "GeoPillars/mAP": 0.1091,
+            "GeoPillars/mAP@0-20m": 0.2225,
+            "GeoPillars/mAP@20-40m": 0.0337,
+            "GeoPillars/mAP@40m+": 0.0133,
+            "GeoPillars/mBEVIoU": 0.7186
+          },
+          "eval_runtime": {
+            "gpu": "NVIDIA GeForce RTX 5060 Ti",
+            "batch_size": 24,
+            "num_workers": 8,
+            "precision": "fp32",
+            "wall_time_s": 310.6,
+            "peak_gpu_mem_allocated_mb": 10282,
+            "peak_gpu_mem_reserved_mb": 10664,
+            "params_total": 6979284,
+            "model_forward_ms_per_batch_mean": 880.89,
+            "model_forward_fps_at_batch": 27.2,
+            "note": "forward timing is data_preprocessor+model+postprocess per batch on this GPU (first 10 iters skipped); not single-frame latency"
+          },
+          "pr_curves": "work_dirs/eval_nusc_zeroshot/centerpoint_geopillar_encoder_replk_distributed/epoch_8/pr_curves/pr_curves.json",
+          "evaluated_at": "2026-09-14T14:18:22+00:00",
+          "carla_test": {
+            "result": "work_dirs/eval_carla_test/centerpoint_geopillar_encoder_replk_distributed/epoch_8/result.json",
+            "metrics": {
+              "GeoPillars/AP@0.7": 0.8113,
+              "GeoPillars/AP@0.5": 0.9312,
+              "GeoPillars/mAP": 0.8712,
+              "GeoPillars/mBEVIoU": 0.8281,
+              "GeoPillars/mAOE": 0.071,
+              "GeoPillars/AP@0.7@0-20m": 0.8848,
+              "GeoPillars/AP@0.7@20-40m": 0.7444,
+              "GeoPillars/AP@0.7@40m+": 0.6152
+            }
+          },
+          "drop_pp": {
+            "GeoPillars/AP@0.7": -75.51,
+            "GeoPillars/AP@0.5": -76.93,
+            "GeoPillars/mAP": -76.21,
+            "GeoPillars/mBEVIoU": -10.95,
+            "GeoPillars/mAOE": 92.59,
+            "GeoPillars/AP@0.7@0-20m": -75.87,
+            "GeoPillars/AP@0.7@20-40m": -73.31,
+            "GeoPillars/AP@0.7@40m+": -61.2
+          },
+          "retained_pct": {
+            "GeoPillars/AP@0.7": 6.9,
+            "GeoPillars/AP@0.5": 17.4,
+            "GeoPillars/mAP": 12.5,
+            "GeoPillars/mBEVIoU": 86.8,
+            "GeoPillars/AP@0.7@0-20m": 14.3,
+            "GeoPillars/AP@0.7@20-40m": 1.5,
+            "GeoPillars/AP@0.7@40m+": 0.5
+          },
+          "status": "done"
+        }
+      },
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)"
+    }
+  },
+  "summary": [
+    {
+      "run": "geo_pillars_h100_intensity",
+      "epoch": 8,
+      "paper_role": "headline",
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+      "AP@0.7": 0.0592,
+      "AP@0.5": 0.1823,
+      "mAP": 0.1207,
+      "mBEVIoU": 0.7181,
+      "mAOE": 0.9964,
+      "AP@0.7@0-20m": 0.1291,
+      "AP@0.7@20-40m": 0.0139,
+      "AP@0.7@40m+": 0.0026,
+      "carla_test_AP@0.7": 0.8133,
+      "AP@0.7_drop_pp": -75.41,
+      "AP@0.7_retained_pct": 7.3
+    },
+    {
+      "run": "geo_pillars_h100_nointensity_final",
+      "epoch": 8,
+      "paper_role": "intensity ablation (GeoPillars)",
+      "input_features": "xyz",
+      "AP@0.7": 0.0664,
+      "AP@0.5": 0.1862,
+      "mAP": 0.1263,
+      "mBEVIoU": 0.7206,
+      "mAOE": 1.0822,
+      "AP@0.7@0-20m": 0.1462,
+      "AP@0.7@20-40m": 0.0152,
+      "AP@0.7@40m+": 0.0031,
+      "carla_test_AP@0.7": 0.8121,
+      "AP@0.7_drop_pp": -74.57,
+      "AP@0.7_retained_pct": 8.2
+    },
+    {
+      "run": "centerpoint_h100_intensity_original",
+      "epoch": 8,
+      "paper_role": "CenterPoint at native budget (\"properly configured\" baseline)",
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+      "AP@0.7": 0.0969,
+      "AP@0.5": 0.207,
+      "mAP": 0.1519,
+      "mBEVIoU": 0.7356,
+      "mAOE": 0.8429,
+      "AP@0.7@0-20m": 0.2151,
+      "AP@0.7@20-40m": 0.0232,
+      "AP@0.7@40m+": 0.0038,
+      "carla_test_AP@0.7": 0.7942,
+      "AP@0.7_drop_pp": -69.73,
+      "AP@0.7_retained_pct": 12.2
+    },
+    {
+      "run": "centerpoint_h100_intensity",
+      "epoch": 8,
+      "paper_role": "CenterPoint at GeoPillars budget (initial gap)",
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+      "AP@0.7": 0.0283,
+      "AP@0.5": 0.1228,
+      "mAP": 0.0756,
+      "mBEVIoU": 0.6934,
+      "mAOE": 1.0099,
+      "AP@0.7@0-20m": 0.0659,
+      "AP@0.7@20-40m": 0.0042,
+      "AP@0.7@40m+": 0.0011,
+      "carla_test_AP@0.7": 0.6757,
+      "AP@0.7_drop_pp": -64.74,
+      "AP@0.7_retained_pct": 4.2
+    },
+    {
+      "run": "centerpoint_h100_no_intensity",
+      "epoch": 8,
+      "paper_role": "intensity ablation (CenterPoint)",
+      "input_features": "xyz",
+      "AP@0.7": 0.0246,
+      "AP@0.5": 0.119,
+      "mAP": 0.0718,
+      "mBEVIoU": 0.6887,
+      "mAOE": 1.0133,
+      "AP@0.7@0-20m": 0.061,
+      "AP@0.7@20-40m": 0.0033,
+      "AP@0.7@40m+": 0.0009,
+      "carla_test_AP@0.7": 0.6701,
+      "AP@0.7_drop_pp": -64.55,
+      "AP@0.7_retained_pct": 3.7
+    },
+    {
+      "run": "centerpoint_osf1_ablation",
+      "epoch": 8,
+      "paper_role": "head-resolution rung",
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+      "AP@0.7": 0.0456,
+      "AP@0.5": 0.1511,
+      "mAP": 0.0983,
+      "mBEVIoU": 0.7073,
+      "mAOE": 1.0045,
+      "AP@0.7@0-20m": 0.1025,
+      "AP@0.7@20-40m": 0.0101,
+      "AP@0.7@40m+": 0.0019,
+      "carla_test_AP@0.7": 0.7776,
+      "AP@0.7_drop_pp": -73.2,
+      "AP@0.7_retained_pct": 5.9
+    },
+    {
+      "run": "centerpoint_geopillar_encoder_replk_distributed",
+      "epoch": 8,
+      "paper_role": "NGFM contribution (everything but NGFM)",
+      "input_features": "xyz + intensity column (nuScenes intensity overwritten to 1.0, as in CARLA)",
+      "AP@0.7": 0.0562,
+      "AP@0.5": 0.1619,
+      "mAP": 0.1091,
+      "mBEVIoU": 0.7186,
+      "mAOE": 0.9969,
+      "AP@0.7@0-20m": 0.1261,
+      "AP@0.7@20-40m": 0.0113,
+      "AP@0.7@40m+": 0.0032,
+      "carla_test_AP@0.7": 0.8113,
+      "AP@0.7_drop_pp": -75.51,
+      "AP@0.7_retained_pct": 6.9
+    }
+  ]
+}

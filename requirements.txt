@@ -1,0 +1,17 @@
+# Python 3.10. PyTorch and the OpenMMLab stack (mmengine, mmcv, mmdet, mmdet3d) are
+# installed by modifiedLibs/setup_env.sh, which also installs this file.
+# Versions are the ones the recorded evaluations in results/ ran with.
+
+numpy==1.24.4
+# Rotated BEV IoU in GeoPillarsMetric. Without Shapely the metric falls back to
+# axis-aligned IoU and every AP changes (AP@0.7 of run A drops by about 11 points).
+shapely==1.8.5.post1
+nuscenes-devkit==1.1.11
+pyquaternion==0.9.9
+open3d==0.19.0
+matplotlib==3.5.3
+pandas==2.3.3
+pillow==12.2.0
+tqdm==4.68.1
+ninja==1.13.0
+opencv-python-headless

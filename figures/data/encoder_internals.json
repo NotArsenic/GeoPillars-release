@@ -1,0 +1,313 @@
+{
+  "description": "Trained values of the GroupedVectorAttention gate (gamma, relation_scale) and of bev_pos_encoding, plus what each contributes on a real batch. gamma initialises to 0 and bev_pos_encoding to randn*0.01.",
+  "epoch": 8,
+  "runs": {
+    "A": {
+      "run": "geo_pillars_h100_intensity",
+      "checkpoint_params": {
+        "gamma": {
+          "parameter": "inner.pillar_feature_net.vector_attention.gamma",
+          "shape": [
+            1
+          ],
+          "numel": 1,
+          "abs_mean": 0.02871,
+          "mean": 0.02871,
+          "std": NaN,
+          "min": 0.02871,
+          "max": 0.02871,
+          "l2": 0.0287,
+          "value": 0.0287104
+        },
+        "relation_scale": {
+          "parameter": "inner.pillar_feature_net.vector_attention.relation_scale",
+          "shape": [
+            1,
+            1,
+            1,
+            8
+          ],
+          "numel": 8,
+          "abs_mean": 1.041735,
+          "mean": 1.041735,
+          "std": 0.034534,
+          "min": 0.99701,
+          "max": 1.092299,
+          "l2": 2.9479,
+          "values": [
+            1.092299,
+            1.060743,
+            1.043438,
+            0.99701,
+            1.046668,
+            1.002653,
+            1.07592,
+            1.015152
+          ]
+        },
+        "bev_pos_encoding": {
+          "parameter": "inner.pillar_feature_net.bev_pos_encoding",
+          "shape": [
+            1,
+            64,
+            256,
+            256
+          ],
+          "numel": 4194304,
+          "abs_mean": 0.013039,
+          "mean": 5.9e-05,
+          "std": 0.016733,
+          "min": -0.149904,
+          "max": 0.185495,
+          "l2": 34.2658
+        }
+      },
+      "forward": {
+        "gva": {
+          "x": {
+            "numel": 7081280,
+            "abs_mean": 0.398986,
+            "mean": 0.398986,
+            "std": 0.815349,
+            "min": 0.0,
+            "max": 10.756158,
+            "l2": 2415.5439
+          },
+          "gamma_times_out": {
+            "numel": 7081280,
+            "abs_mean": 0.009916,
+            "mean": -0.001974,
+            "std": 0.016205,
+            "min": -0.191947,
+            "max": 0.170132,
+            "l2": 43.4411
+          },
+          "n_valid_points": 110645,
+          "n_padded_slots": 106195,
+          "global_l2_ratio": 0.01798397,
+          "per_point_l2_ratio": {
+            "mean": 0.01835311,
+            "median": 0.01830205,
+            "p99": 0.0208416,
+            "max": 0.02483971
+          }
+        },
+        "prior": {
+          "grid": [
+            8,
+            64,
+            256,
+            256
+          ],
+          "occupied_cells": 27105,
+          "empty_cells": 497183,
+          "occupancy_fraction": 0.051699,
+          "prior_whole_tensor": {
+            "numel": 4194304,
+            "abs_mean": 0.013039,
+            "mean": 5.9e-05,
+            "std": 0.016733,
+            "min": -0.149904,
+            "max": 0.185495,
+            "l2": 34.2694
+          },
+          "canvas_before_prior_whole_tensor": {
+            "numel": 33554432,
+            "abs_mean": 0.032339,
+            "mean": 0.032339,
+            "std": 0.280915,
+            "min": 0.0,
+            "max": 9.744116,
+            "l2": 1637.9829
+          },
+          "canvas_after_prior_whole_tensor": {
+            "numel": 33554432,
+            "abs_mean": 0.044966,
+            "mean": 0.032398,
+            "std": 0.281384,
+            "min": -0.149904,
+            "max": 9.765713,
+            "l2": 1640.717
+          },
+          "occupied": {
+            "n_cells": 27105,
+            "n_elements": 1734720,
+            "canvas_before_prior": {
+              "numel": 1734720,
+              "abs_mean": 0.625527,
+              "mean": 0.625527,
+              "std": 1.074875,
+              "min": 0.0,
+              "max": 9.744116,
+              "l2": 1637.9829
+            },
+            "prior": {
+              "numel": 1734720,
+              "abs_mean": 0.014282,
+              "mean": -0.000334,
+              "std": 0.018427,
+              "min": -0.138817,
+              "max": 0.164213,
+              "l2": 24.2744
+            },
+            "abs_mean_ratio_prior_over_canvas": 0.022832,
+            "l2_ratio_prior_over_canvas": 0.01482
+          },
+          "empty": {
+            "n_cells": 497183,
+            "n_elements": 31819712,
+            "canvas_before_prior": {
+              "numel": 31819712,
+              "abs_mean": 0.0,
+              "mean": 0.0,
+              "std": 0.0,
+              "min": 0.0,
+              "max": 0.0,
+              "l2": 0.0
+            },
+            "prior": {
+              "numel": 31819712,
+              "abs_mean": 0.012972,
+              "mean": 8e-05,
+              "std": 0.016635,
+              "min": -0.149904,
+              "max": 0.185495,
+              "l2": 93.8396
+            },
+            "abs_mean_ratio_prior_over_canvas": null,
+            "l2_ratio_prior_over_canvas": null
+          },
+          "empty_cells_are_exactly_zero_before_prior": true,
+          "fraction_of_canvas_energy_from_prior": 0.00349
+        },
+        "batch": {
+          "batch_size": 8,
+          "frames": 8,
+          "device": "cuda:0"
+        }
+      }
+    },
+    "B": {
+      "run": "geo_pillars_h100_nointensity_final",
+      "checkpoint_params": {
+        "gamma": {
+          "parameter": "inner.pillar_feature_net.vector_attention.gamma",
+          "shape": [
+            1
+          ],
+          "numel": 1,
+          "abs_mean": 0.037813,
+          "mean": -0.037813,
+          "std": NaN,
+          "min": -0.037813,
+          "max": -0.037813,
+          "l2": 0.0378,
+          "value": -0.03781308
+        },
+        "relation_scale": {
+          "parameter": "inner.pillar_feature_net.vector_attention.relation_scale",
+          "shape": [
+            1,
+            1,
+            1,
+            8
+          ],
+          "numel": 8,
+          "abs_mean": 1.064868,
+          "mean": 1.064868,
+          "std": 0.047727,
+          "min": 1.014714,
+          "max": 1.139239,
+          "l2": 3.0145,
+          "values": [
+            1.033853,
+            1.026226,
+            1.05258,
+            1.136901,
+            1.014714,
+            1.058532,
+            1.056898,
+            1.139239
+          ]
+        },
+        "bev_pos_encoding": {
+          "parameter": "inner.pillar_feature_net.bev_pos_encoding",
+          "shape": [
+            1,
+            64,
+            256,
+            256
+          ],
+          "numel": 4194304,
+          "abs_mean": 0.013105,
+          "mean": -0.000222,
+          "std": 0.016843,
+          "min": -0.174954,
+          "max": 0.192876,
+          "l2": 34.4937
+        }
+      }
+    },
+    "G": {
+      "run": "centerpoint_geopillar_encoder_replk_distributed",
+      "checkpoint_params": {
+        "gamma": {
+          "parameter": "pts_voxel_encoder.pfn.vector_attention.gamma",
+          "shape": [
+            1
+          ],
+          "numel": 1,
+          "abs_mean": 0.024663,
+          "mean": -0.024663,
+          "std": NaN,
+          "min": -0.024663,
+          "max": -0.024663,
+          "l2": 0.0247,
+          "value": -0.02466316
+        },
+        "relation_scale": {
+          "parameter": "pts_voxel_encoder.pfn.vector_attention.relation_scale",
+          "shape": [
+            1,
+            1,
+            1,
+            8
+          ],
+          "numel": 8,
+          "abs_mean": 1.057989,
+          "mean": 1.057989,
+          "std": 0.042849,
+          "min": 0.985089,
+          "max": 1.131589,
+          "l2": 2.9946,
+          "values": [
+            1.068543,
+            1.131589,
+            0.985089,
+            1.062297,
+            1.074228,
+            1.066183,
+            1.017248,
+            1.058738
+          ]
+        },
+        "bev_pos_encoding": {
+          "parameter": "pts_voxel_encoder.pfn.bev_pos_encoding",
+          "shape": [
+            1,
+            64,
+            256,
+            256
+          ],
+          "numel": 4194304,
+          "abs_mean": 0.013118,
+          "mean": -0.000421,
+          "std": 0.016861,
+          "min": -0.156037,
+          "max": 0.175772,
+          "l2": 34.5384
+        }
+      }
+    }
+  }
+}
