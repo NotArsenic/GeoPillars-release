@@ -2,7 +2,7 @@
 
 # GeoPillars: A Large-Kernel Pillar Detector for Single-Sweep LiDAR Under Point Sparsity
 
-**Chaitanya Dumbre, Shubham Sarkar, Akash Mohapatra, Sheetal Girase**
+**Chaitanya Dumbre, Shubham Sarkar, Akash Mohapatra, Ghanasham Patil, and Sheetal Girase**
 
 School of Computer Science and Engineering, MIT World Peace University, Pune, India
 
