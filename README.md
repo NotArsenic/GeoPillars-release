@@ -1,6 +1,6 @@
 <div align="center">
 
-# GeoPillars: A Large-Kernel Pillar Detector for Single-Sweep LiDAR Under Point Sparsity
+# GeoPillars: A Large-Kernel Pillar Detector for Single-Sweep LiDAR Under Point Sparsity, and a Decomposition of Its Gain
 
 **Chaitanya Dumbre, Shubham Sarkar, Akash Mohapatra, Ghanasham Patil, and Sheetal Girase**
 
@@ -254,7 +254,7 @@ modifiedLibs/            patched OpenMMLab files and the environment setup scrip
 
 ```bibtex
 @misc{dumbre2026geopillars,
-  title  = {{GeoPillars}: A Large-Kernel Pillar Detector for Single-Sweep {LiDAR} Under Point Sparsity},
+  title  = {{GeoPillars}: A Large-Kernel Pillar Detector for Single-Sweep {LiDAR} Under Point Sparsity, and a Decomposition of Its Gain},
   author = {Dumbre, Chaitanya and Sarkar, Shubham and Mohapatra, Akash and Girase, Sheetal},
   year   = {2026},
   note   = {Preprint}
